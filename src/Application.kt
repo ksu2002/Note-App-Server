@@ -35,6 +35,28 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
+        get("/note/{id}") {
+            val id = call.parameters["id"]
+            call.respond("${id}")
+        }
+
+        get("/note") {
+            val id = call.request.queryParameters["id"]
+            call.respond("${id}")
+        }
+
+        route("/notes") {
+            route("/create") {
+                post {
+                    val body = call.receive<String>()
+                    call.respond(body)
+                }
+            }
+            delete {
+                val body = call.receive<String>()
+                call.respond(body)
+            }
+        }
 
     }
 }
