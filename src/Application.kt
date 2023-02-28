@@ -4,7 +4,7 @@ import com.example.authentication.JwtService
 import com.example.authentication.hash
 import com.example.data.model.User
 import com.example.repository.DatabaseFactory
-import com.example.repository.repo
+import com.example.repository.Repo
 import com.example.routes.UserRoutes
 import io.ktor.application.*
 import io.ktor.response.*
@@ -25,7 +25,7 @@ fun Application.module(testing: Boolean = false) {
 
     DatabaseFactory.init()
 
-    val db = repo()
+    val db = Repo()
     val jwtService = JwtService()
     val hashFunction = {s:String -> hash(s)}
 
