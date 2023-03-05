@@ -7,6 +7,7 @@ import com.example.data.table.UserTable
 import com.example.data.table.UserTable.email
 import com.example.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class Repo {
    suspend fun addUser(user: User){
@@ -36,14 +37,15 @@ class Repo {
 
     suspend fun addNote(note: Note, email: String){
         dbQuery {
-            NoteTable.insert{nt->
+            NoteTable.insert(//лямбда в { }
+                {nt: InsertStatement<Number> ->//параметры
                 nt[NoteTable.id] = note.id
                 nt[NoteTable.userEmail] = email
                 nt[NoteTable.noteTitle] = note.noteTitle
                 nt[NoteTable.description] = note.description
                 nt[NoteTable.date] = note.date
-
             }
+            )
         }
     }
 
@@ -67,9 +69,9 @@ class Repo {
         }
     }
 
-    suspend fun deleteNote(id: String){
+    suspend fun deleteNote(id: String, email: String){
         dbQuery {
-            NoteTable.deleteWhere { NoteTable.id.eq(id) }
+            NoteTable.deleteWhere { NoteTable.userEmail.eq(email) and NoteTable.id.eq(id) }
         }
     }
 
